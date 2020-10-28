@@ -17,7 +17,7 @@ The data is taken using the Jikan (Kanji: 時間) API, an open source PHP and RE
 using JikanPy.
 
 ## Visuals
-![visuals](https://imgur.com/a/4EYLNxT)
+![visuals](https://imgur.com/GwsGDVS)
 
 ## Future Work
 Moving forward, machine learning can be implemented in PyAnimeList to recommend anime based on previous user input. This can be done by recommending
