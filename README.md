@@ -16,6 +16,9 @@ and querying.
 The data is taken using the Jikan (Kanji: 時間) API, an open source PHP and REST API that parses website data from MyAnimeList. There is a Python wrapper for Jikan
 using JikanPy.
 
+## Visuals
+![visuals](https://imgur.com/a/4EYLNxT)
+
 ## Future Work
 Moving forward, machine learning can be implemented in PyAnimeList to recommend anime based on previous user input. This can be done by recommending
 users anime based on genre and score that were input by the user. Natural Language Processing should provide the necessary models for anime recommendation.
