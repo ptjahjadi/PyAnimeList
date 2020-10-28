@@ -2,7 +2,7 @@
 Retrieve your favourite anime or search for recommendations through filtering and sorting.
 
 ## Aim
-The aim of this project is to store and retrieve data from MyAnimeList: https://myanimelist.net/
+The aim of this project is to store and retrieve data from MyAnimeList: https://myanimelist.net/.
 
 Users can retrieve data of their favourite Anime/Donghua from the most updated MyAnimeList site in Python.
 
