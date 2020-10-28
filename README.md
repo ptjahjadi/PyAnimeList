@@ -18,6 +18,7 @@ using JikanPy.
 
 ## Visuals
 ![visuals](https://imgur.com/GwsGDVS.jpg)
+Example of anime filtering using a MyAnimeList average score of higher than 7, with the Slice of Life genre between 2010 and 2020, sorted by the number of members (popularity).
 
 ## Future Work
 Moving forward, machine learning can be implemented in PyAnimeList to recommend anime based on previous user input. This can be done by recommending
