@@ -7,9 +7,9 @@ The aim of this project is to store and retrieve data from MyAnimeList: https://
 Users can retrieve data of their favourite Anime/Donghua from the most updated MyAnimeList site in Python.
 
 The program is divided into phases (WIP):
-*Phase 1 (26 Oct 2020): A sorting and querying method is provided that allows users to retrieve Anime/Donghua based on their preferences. Users can select attributes such as title, genre or score to retrieve anime data and sort based on these attributes.
+* Phase 1 (26 Oct 2020): A sorting and querying method is provided that allows users to retrieve Anime/Donghua based on their preferences. Users can select attributes such as title, genre or score to retrieve anime data and sort based on these attributes.
 
-*Phase 2 (2 Nov 2020): An NLP-based recommender system using cosine similarity allows users to input the title of an anime to retrieve similar anime. This system allows recommending users similar anime based on genre, synopsis and anime producer.
+* Phase 2 (2 Nov 2020): An NLP-based recommender system using cosine similarity allows users to input the title of an anime to retrieve similar anime. This system allows recommending users similar anime based on genre, synopsis and anime producer.
 
 ## Setting Up
 This model is written in both Jupyter Notebook version 4.4.0 and Python version 3.7.1. You may use any integrated development environment (IDE)
