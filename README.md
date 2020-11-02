@@ -25,7 +25,7 @@ using JikanPy.
 ![visuals](https://imgur.com/GwsGDVS.jpg)
 Phase 1: Example of anime filtering using a MyAnimeList average score of higher than 7, with the Slice of Life genre between 2010 and 2020, sorted by the number of members (popularity).
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/q6ZiQNh"  ><a href="//imgur.com/a/q6ZiQNh"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+![visuals](https://imgur.com/q6ZiQNh.jpg)
 Phase 2: Example of the anime recommender system, recommending anime similar to New Game!
 
 ## Future Work
