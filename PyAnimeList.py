@@ -1,19 +1,80 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# PyAnimeList by Patrick Tjahjadi
+# 
+# Program to retrieve Anime/Donghua data from MyAnimeList, including score, year, genre, etc.
+# 
+# Allows users to filter Anime/Donghua based on these attributes with a sorting feature.
+# 
+# Search for your favourite Anime/Donghua or simply look for recommendation with the filtering and sorting feature!
 
 # In[3]:
 
+
+# Imported Libraries
 from jikanpy import Jikan
 import pandas as pd
 import time
 from IPython.display import clear_output
 import dill
+from rake_nltk import Rake
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
+
 
 # In[4]:
 
-dill.load_session('my_anime_list.db')
 
+# We can load this later instead of retrieving data again
+# dill.load_session('my_anime_list.db')
+
+
+# In[2]:
+
+
+# Function to clean words from punctuation and remove capital case to standardise text tokens
+def clean_text(word):
+    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_123456789~'''
+    no_punct = ""
+    for char in word:
+        if char not in punctuations:
+            no_punct = no_punct + char
+    return no_punct.lower()
+
+
+# In[3]:
+
+
+# Set up data for anime from 2000 to 2020 for retrieval using the Jikan API
+
+jikan = Jikan()
+
+years = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+         2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+seasons = ['winter', 'spring', 'summer', 'fall']
+
+myanimelist = []
+
+
+# In[4]:
+
+
+# Retrieve anime data through Jikan
+# Time delay of 7 seconds per year for API rate limiting
+for year in years:
+    for season in seasons:
+        myanimelist.append(jikan.season(year = year, season = season))
+    time.sleep(7)
+
+
+# PHASE 1: Store and retrieve anime data in dataframes for search and sort
 
 # In[6]:
 
+
+# Collect all necessary attributes: Title, Score, Members, Genre, Producers, Year, Season and Synopsis
 animedata = []
 for animeseason in myanimelist:
     for show in animeseason['anime']:
@@ -26,18 +87,17 @@ for animeseason in myanimelist:
 # In[7]:
 
 
+# Create a dataframe to store Anime data and remove duplicate entries
 anime_df = pd.DataFrame(animedata, columns = ["Title", "Score", "Members", "Genre", "Producers", "Year", "Season", "Synopsis",])
+anime_df.drop_duplicates(subset="Title", keep = 'first', inplace = True)
 anime_df.index.name = "Anime ID"
 
 
-# In[8]:
+# In[3]:
 
 
-anime_df.drop_duplicates(subset="Title", keep = 'first', inplace = True)
-
-# In[10]:
-
-
+# Function to retrieve anime based on filtering and sorting input
+def get_my_anime(output_anime_df):
     list_of_queries = []
     list_of_sort = ["None"]
     while (1):
@@ -102,9 +162,101 @@ def sort_my_anime(interim_df, list_of_queries, list_of_sort):
             return interim_df
 
 
+# In[4]:
+
+
+# Query and search for anime here!
+query_df = get_my_anime(anime_df)
+query_df
+
+
+# PHASE 2: Use natural language processing to determine anime similarity for recommendation
+
+# In[10]:
+
+
+# Initializing a keywords column for natural language processing
+anime_df['Keywords'] = ""
+
+count = 0
+# Iterate through each anime and get their keywords
+for index, row in anime_df.iterrows():
+    # Input double weighting on genre so recommendations are more genre-based
+    keyword_order = [row['Synopsis'], row['Genre'], row['Genre'], row['Producers']]
+    keywords = " ".join(keyword_order)
+
+    # Use rake to discard English stopwords
+    r = Rake()
+
+    # Extracting the keywords by passing the text
+    r.extract_keywords_from_text(keywords)
+
+    # Get the dictionary with keywords as keys and scores as values
+    # Score = Degree(word) / Frequency(word)
+    key_words_dict_scores = r.get_word_degrees()
+    
+    # Remove punctuations from all keywords
+    wordlist = list(key_words_dict_scores.keys())
+    for index in range(0, len(wordlist)):
+        wordlist[index] = clean_text(wordlist[index])
+    
+    # Assign the key words to the keywords column
+    anime_df['Keywords'].iloc[count] = " ".join(wordlist)
+    count+= 1
+
+
+# In[11]:
+
+
+# Calculate frequency of keywords and generate the count matrix 
+count = CountVectorizer()
+count_matrix = count.fit_transform(anime_df['Keywords'])
+
+# Generate the cosine similarity matrix
+cosine_sim = cosine_similarity(count_matrix, count_matrix)
+
+
 # In[12]:
 
 
-query_df = get_my_anime(anime_df)
-query_df
+# Store the Python data into byte streams for faster future processing
+dill.dump_session('my_anime_list.db')
+
+
+# In[5]:
+
+
+# Recommend anime based on cosine similarity
+
+anime_titles = list(anime_df['Title'])
+
+def anime_recommendations(cosine_sim = cosine_sim):
+    anime_title = input("Input an anime title for recommendation:\n")
+    recommended_anime = []
+    
+    idx = anime_titles.index(anime_title)
+
+    score_series = pd.Series(cosine_sim[idx]).sort_values(ascending = False)
+
+
+    top_10_indexes = list(score_series.iloc[1:11].index)
+    for index in top_10_indexes:
+        recommended_anime.append(anime_df.Title.iloc[index])
+    clear_output(wait=True)
+    print("Anime similar to "+anime_title+" are:")
+    for anime in recommended_anime:
+        print(anime)
+
+
+# In[7]:
+
+
+# Run the recommender here
+anime_recommendations()
+
+
+# In[ ]:
+
+
+
 
