@@ -11,6 +11,8 @@ The program is divided into phases (WIP):
 
 * Phase 2 (2 Nov 2020): An NLP-based recommender system using cosine similarity allows users to input the title of an anime to retrieve similar anime. This system allows recommending users similar anime based on genre, synopsis and anime producer.
 
+* Phase 2.1 (7 Nov 2020): Updates to the querying and recommender system for ease of usage. This includes an additional feature for querying that accepts number of results as user input. The recommender system is now case-insensitive and is able to return the closest anime search to the user input. Anime title synonyms are not supported, however.
+
 ## Setting Up
 This model is written in both Jupyter Notebook version 4.4.0 and Python version 3.7.1. You may use any integrated development environment (IDE)
 to run the program using a Python interpreter but Visual Studio Code or Jupyter Notebook is highly recommended thanks to their Python Interactive window.
