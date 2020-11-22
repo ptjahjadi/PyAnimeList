@@ -25,7 +25,7 @@ and querying.
 The data is taken using the Jikan (Kanji: 時間) API, an open source PHP and REST API that parses website data from MyAnimeList. There is a Python wrapper for Jikan
 using JikanPy.
 
-## Visuals1
+## Visuals
 ![visuals](https://imgur.com/PMzOzlO.jpg)
 
 Phase 1: Example of anime filtering using a MyAnimeList average score between 7 and 9, with the Slice of Life genre and made after 2010, sorted by the number of members (popularity) with 5 results.
