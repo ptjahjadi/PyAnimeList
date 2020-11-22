@@ -13,6 +13,8 @@ The program is divided into phases (WIP):
 
 * Phase 2.1 (7 Nov 2020): Updates to the querying and recommender system for ease of usage. This includes an additional feature for querying that accepts number of results as user input. The recommender system is now case-insensitive and is able to return the closest anime search to the user input. Anime title synonyms are not supported, however.
 
+* Phase 3 (22 Nov 2020): The NLP-based recommender system has been developed to also account for previous user queries in Phase 1. The top queried anime will be used as recommendations, allowing for a more personalised recommendation. The more times the user queries, the more varied the system in recommending anime.
+
 ## Setting Up
 This model is written in both Jupyter Notebook version 4.4.0 and Python version 3.7.1. You may use any integrated development environment (IDE)
 to run the program using a Python interpreter but Visual Studio Code or Jupyter Notebook is highly recommended thanks to their Python Interactive window.
@@ -23,7 +25,7 @@ and querying.
 The data is taken using the Jikan (Kanji: 時間) API, an open source PHP and REST API that parses website data from MyAnimeList. There is a Python wrapper for Jikan
 using JikanPy.
 
-## Visuals
+## Visuals1
 ![visuals](https://imgur.com/PMzOzlO.jpg)
 
 Phase 1: Example of anime filtering using a MyAnimeList average score between 7 and 9, with the Slice of Life genre and made after 2010, sorted by the number of members (popularity) with 5 results.
@@ -33,5 +35,8 @@ Phase 1: Example of anime filtering using a MyAnimeList average score between 7 
 
 Phase 2: Example of the anime recommender system, recommending anime similar to New Game!
 
+![visuals](https://imgur.com/ZXw0zdU.jpg)
+Phase 3: Example of the anime recommender system, after the user queries for Toradora!, Mahou Shoujo Madoka★Magica, and Ojamajo Doremi Sharp.
+
 ## Future Work
-Moving beyond Phase 2, PyAnimeList can recommend users anime (Phase 2) based on genre and score that were input by the user through the search function (Phase 1). By gathering information of several anime searches by the user, the program could provide personalised recommendations without the need of manual user input. The personalised recommendations could also contain data besides the anime's title, such as score, genre and synopsis. Case sensitivity and syntax could also be further relaxed, allowing users to search anime without needing an exact match. 
+Moving beyond Phase 3, the query in Phase 1 can be further improved by removing case sensitivity and typo. For instance, being able to detect the user's genre input "slice of lief" as "Slice of Life", or the title "Id Invaded" as "Id:Invaded".
