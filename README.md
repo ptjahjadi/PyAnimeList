@@ -36,6 +36,7 @@ Phase 1: Example of anime filtering using a MyAnimeList average score between 7 
 Phase 2: Example of the anime recommender system, recommending anime similar to New Game!
 
 ![visuals](https://imgur.com/ZXw0zdU.jpg)
+
 Phase 3: Example of the anime recommender system, after the user queries for Toradora!, Mahou Shoujo Madoka★Magica, and Ojamajo Doremi Sharp.
 
 ## Future Work
