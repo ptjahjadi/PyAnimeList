@@ -332,6 +332,8 @@ dill.dump_session('my_anime_list.db')
 anime_recommendations(cosine_sim, 10)
 
 
+# PHASE 3: Provide personalised anime recommendations to users through the results of their queries
+
 # In[ ]:
 
 
