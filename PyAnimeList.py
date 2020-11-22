@@ -28,8 +28,51 @@ import difflib
 # In[ ]:
 
 
-# We can load this later instead of retrieving data again
-dill.load_session('my_anime_list.db')
+# Function to ask for an anime title and recommend anime based on cosine similarity
+def anime_recommendations(cosine_sim, number_anime):
+    anime_titles = list(anime_df['Title'])
+    # Create another list to remove case sensitivity in searching anime
+    anime_titles_lower = [title.lower() for title in anime_titles]      
+    anime_title = input("Input an anime title for recommendation:\n")
+    
+    # Recommend an anime if a similar match is found
+    try:
+        anime_title = difflib.get_close_matches(anime_title.lower(), anime_titles_lower, n = 1, cutoff = 0.5)[0]
+        
+        # Find the position of the anime title in the list
+        idx = anime_titles_lower.index(anime_title)
+        
+        # Retrieve the top 10 most similar anime based on cosine similarity
+        score_series = pd.Series(cosine_sim[idx]).sort_values(ascending = False)
+        clear_output(wait=True)
+        print("Anime similar to "+anime_titles[idx]+" are:")
+        top_10_indexes = list(score_series.iloc[1:(number_anime + 1)].index)
+        for index in top_10_indexes:
+            print(anime_df.Title.iloc[index])
+            
+    except IndexError:
+        print("No results found.")
+
+
+# In[ ]:
+
+
+# Function to recommend anime based on query results in Phase 1
+def anime_recommendations_from_query(query_recommendation_list, cosine_sim, number_anime):
+    anime_titles = list(anime_df['Title'])
+    num_output = round(number_anime / len(query_recommendation_list)) + 1
+    top_anime = []
+    for recommended_title in query_recommendation_list:
+        anime_title = difflib.get_close_matches(recommended_title, anime_titles, n = 1, cutoff = 0.5)[0]
+        idx = anime_titles.index(anime_title)
+        score_series = pd.Series(cosine_sim[idx]).sort_values(ascending = False)
+        testlist = list(score_series.iloc[1:num_output].index)
+        top_anime.append(testlist)
+
+    print("Based on your recent queries, here are some recommended anime for you:")
+    for each_recommended_anime in top_anime:
+        for index in each_recommended_anime:
+            print(anime_df.Title.iloc[index])
 
 
 # In[ ]:
@@ -48,6 +91,17 @@ def clean_text(word):
 # In[ ]:
 
 
+# We can load this later instead of retrieving data again
+dill.load_session('my_anime_list.db')
+
+
+# In[ ]:
+
+
+"""
+Skip running this block if the session "my_anime_list.db" has been loaded
+"""
+
 # Set up data for anime from 2000 to 2020 for retrieval using the Jikan API
 
 jikan = Jikan()
@@ -61,6 +115,10 @@ myanimelist = []
 
 # In[ ]:
 
+
+"""
+Skip running this block if the session "my_anime_list.db" has been loaded
+"""
 
 # Retrieve anime data through Jikan
 # Time delay of 7 seconds per year for API rate limiting
@@ -96,6 +154,8 @@ anime_df.index.name = "ID"
 
 # In[ ]:
 
+
+query_recommendation_list = []
 
 # Function to retrieve anime based on filtering and sorting input
 def get_my_anime(output_anime_df):
@@ -199,6 +259,8 @@ def limit_my_anime():
 
 # Query and search for anime here!
 query_df = get_my_anime(anime_df)
+if query_df["Title"].iloc[0] not in query_recommendation_list:
+    query_recommendation_list.append(query_df["Title"].iloc[0])
 query_df
 
 
@@ -206,6 +268,10 @@ query_df
 
 # In[ ]:
 
+
+"""
+Skip running this block if the session "my_anime_list.db" has been loaded
+"""
 
 # Initializing a keywords column for natural language processing
 anime_df['Keywords'] = ""
@@ -240,6 +306,10 @@ for index, row in anime_df.iterrows():
 # In[ ]:
 
 
+"""
+Skip running this block if the session "my_anime_list.db" has been loaded
+"""
+
 # Calculate frequency of keywords and generate the count matrix 
 count = CountVectorizer()
 count_matrix = count.fit_transform(anime_df['Keywords'])
@@ -258,39 +328,15 @@ dill.dump_session('my_anime_list.db')
 # In[ ]:
 
 
-# Recommend anime based on cosine similarity
-def anime_recommendations(cosine_sim = cosine_sim):
-    anime_titles = list(anime_df['Title'])
-    # Create another list to remove case sensitivity in searching anime
-    anime_titles_lower = []
-    for anime_title in anime_titles:
-        anime_titles_lower.append(anime_title.lower())
-        
-    anime_title = input("Input an anime title for recommendation:\n")
-    # Recommend an anime if a similar match is found
-    try:
-        anime_title = difflib.get_close_matches(anime_title.lower(), anime_titles_lower, n = 1, cutoff = 0.5)[0]
-        
-        # Find the position of the anime title in the list
-        idx = anime_titles_lower.index(anime_title)
-        
-        # Retrieve the top 10 most similar anime based on cosine similarity
-        score_series = pd.Series(cosine_sim[idx]).sort_values(ascending = False)
-        clear_output(wait=True)
-        print("Anime similar to "+anime_titles[idx]+" are:")
-        top_10_indexes = list(score_series.iloc[1:11].index)
-        for index in top_10_indexes:
-            print(anime_df.Title.iloc[index])
-            
-    except IndexError:
-        print("No results found.")
+# Run the recommender here, and set the number of anime to be recommended in the second parameter
+anime_recommendations(cosine_sim, 10)
 
 
 # In[ ]:
 
 
-# Run the recommender here
-anime_recommendations()
+# Run the recommender here, and set the number of anime to be recommended in the third parameter
+anime_recommendations_from_query(query_recommendation_list, cosine_sim, 20)
 
 
 # In[ ]:
