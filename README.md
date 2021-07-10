@@ -1,5 +1,5 @@
 # PyAnimeList
-Retrieve your favourite anime or search for recommendations through filtering and sorting or the PyAnimeList anime recommender system.
+Retrieve your favourite anime or search for recommendations through filtering and sorting or the PyAnimeList anime recommender system. Data includes shows from Winter 2020 - Summer 2021!
 
 ## Aim
 The aim of this project is to store and retrieve data from MyAnimeList: https://myanimelist.net/.
