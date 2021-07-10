@@ -9,7 +9,7 @@
 # 
 # Search for your favourite Anime/Donghua or simply look for recommendation with the filtering and sorting feature!
 
-# In[ ]:
+# In[5]:
 
 
 # Imported Libraries
@@ -25,7 +25,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import difflib
 
 
-# In[ ]:
+# In[6]:
 
 
 # Function to ask for an anime title and recommend anime based on cosine similarity
@@ -54,7 +54,7 @@ def anime_recommendations(cosine_sim, number_anime):
         print("No results found.")
 
 
-# In[ ]:
+# In[7]:
 
 
 # Function to recommend anime based on query results in Phase 1
@@ -75,12 +75,12 @@ def anime_recommendations_from_query(query_recommendation_list, cosine_sim, numb
             print(anime_df.Title.iloc[index])
 
 
-# In[ ]:
+# In[137]:
 
 
 # Function to clean words from punctuation and remove capital case to standardise text tokens
 def clean_text(word):
-    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_123456789~'''
+    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_0123456789~'''
     no_punct = ""
     for char in word:
         if char not in punctuations:
@@ -95,7 +95,7 @@ def clean_text(word):
 dill.load_session('my_anime_list.db')
 
 
-# In[ ]:
+# In[15]:
 
 
 """
@@ -106,14 +106,13 @@ Skip running this block if the session "my_anime_list.db" has been loaded
 
 jikan = Jikan()
 
-years = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-         2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+years = [year for year in range (2000, 2021)]
 seasons = ['winter', 'spring', 'summer', 'fall']
 
 myanimelist = []
 
 
-# In[ ]:
+# In[17]:
 
 
 """
@@ -126,11 +125,15 @@ for year in years:
     for season in seasons:
         myanimelist.append(jikan.season(year = year, season = season))
     time.sleep(7)
+myanimelist.append(jikan.season(year = 2021, season = 'winter'))
+myanimelist.append(jikan.season(year = 2021, season = 'spring'))
+time.sleep(7)
+myanimelist.append(jikan.season(year = 2021, season = 'summer'))
 
 
 # PHASE 1: Store and retrieve anime data in dataframes for search and sort
 
-# In[ ]:
+# In[50]:
 
 
 # Collect all necessary attributes: Title, Score, Members, Genre, Producers, Year, Season and Synopsis
@@ -143,16 +146,16 @@ for animeseason in myanimelist:
         
 
 
-# In[ ]:
+# In[111]:
 
 
 # Create a dataframe to store Anime data and remove duplicate entries
-anime_df = pd.DataFrame(animedata, columns = ["Title", "Score", "Members", "Genre", "Producers", "Year", "Season", "Synopsis",])
-anime_df.drop_duplicates(subset="Title", keep = 'first', inplace = True)
+anime_df = pd.DataFrame(animedata, columns = ["Title", "Score", "Members", "Genre", "Producers", "Year", "Season", "Synopsis"])
+anime_df.drop_duplicates(subset= "Title", keep = 'first', inplace = True)
 anime_df.index.name = "ID"
 
 
-# In[ ]:
+# In[236]:
 
 
 query_recommendation_list = []
@@ -165,11 +168,10 @@ def get_my_anime(output_anime_df):
     while (1):
         if (query_loop == 1):
             print("Your queries: \n"+", ".join(list_of_queries))
-        method = input("Search anime based on (Title, Score, Members, Genre, Year, Season or Synopsis)? "+
-                       "Otherwise, input 0.\n")
+        method = input("Search anime based on (Title, Score, Members, Producers, Genre, Year, Season or Synopsis)? Otherwise, input 0.\n")
         if (method == "0"):
             break
-        elif (method.lower() in ["title", "score", "members", "genre", "year", "season", "synopsis"]):
+        elif (method.lower() in ["title", "score", "members", "producers", "genre", "year", "season", "synopsis"]):
             output_anime_df = query_my_anime(output_anime_df, method, list_of_queries)
         query_loop = 1
     
@@ -198,12 +200,16 @@ def get_my_anime(output_anime_df):
 
 # Function to filter anime based on attributes
 def query_my_anime(interim_df, method, list_of_queries):
+    # For string-based variables, ask the user for string input and the algorithm will return anime
+    # that contains the string input
     if (method.lower() in ["title", "genre", "producers", "season", "synopsis"]):
         query_content = input("Search by anime "+method.capitalize()+":\n")
-        interim_df = interim_df.query('{}.str.contains("{}")'.format(method.capitalize(), query_content),
+        interim_df = interim_df.query('{}.str.contains("{}", case = False)'.format(method.capitalize(), query_content),
                                       engine = 'python')
         list_of_queries.append("{}: {}".format(method.capitalize(), query_content))
-        
+    
+    # For number-based variables, ask the user if they would like to query less than, equal to or greater than
+    # a particular number or if they would like to specify a numerical range
     elif (method.lower() in ["score", "members", "year"]):
         operator = input("Find anime "+method.capitalize()+
                          " less than, equal to, greater than, or range (L = Less, E = Equal, G = Greater, R = Range)?\n")
@@ -233,8 +239,7 @@ def sort_my_anime(interim_df, list_of_queries, list_of_sort):
     clear_output(wait = True)
     print("Your queries: \n"+", ".join(list_of_queries))
     while (1):
-        sort_attribute = input("Any sorting method (Title, Score, Members, Genre, Year, Season or Synopsis)? "+
-                               "Otherwise, input 0.\n")
+        sort_attribute = input("Any sorting method (Title, Score, Members, Genre, Year, Season or Synopsis)? Otherwise, input 0.\n")
         if (sort_attribute.lower() in ["title", "score", "members", "genre", "year", "season", "synopsis"]):
             while (1):
                 sort_method = input("Ascending or Descending (A = Ascending, D = Descending)?\n")
@@ -254,19 +259,31 @@ def limit_my_anime():
     return limit
 
 
-# In[ ]:
+# In[237]:
 
 
 # Query and search for anime here!
 query_df = get_my_anime(anime_df)
-if query_df["Title"].iloc[0] not in query_recommendation_list:
-    query_recommendation_list.append(query_df["Title"].iloc[0])
+
+# Add the top result of the query to the recommendation list, if it exists
+try:
+    if query_df["Title"].iloc[0] not in query_recommendation_list:
+        query_recommendation_list.append(query_df["Title"].iloc[0])
+except IndexError:
+    pass
 query_df
+
+
+# In[132]:
+
+
+for i, j in anime_df.iterrows():
+    print(j)
 
 
 # PHASE 2: Use natural language processing to determine anime similarity for recommendation
 
-# In[ ]:
+# In[228]:
 
 
 """
@@ -279,8 +296,8 @@ anime_df['Keywords'] = ""
 count = 0
 # Iterate through each anime and get their keywords
 for index, row in anime_df.iterrows():
-    # Input double weighting on genre so recommendations are more genre-based
-    keyword_order = [row['Synopsis'], row['Genre'], row['Genre'], row['Producers']]
+    # Input relevant keywords such as synopsis, genre, title and producer
+    keyword_order = [row['Synopsis'], row['Genre'], row['Title'], row['Producers']]
     keywords = " ".join(keyword_order)
 
     # Use rake to discard English stopwords
@@ -293,17 +310,21 @@ for index, row in anime_df.iterrows():
     # Score = Degree(word) / Frequency(word)
     key_words_dict_scores = r.get_word_degrees()
     
+    
     # Remove punctuations from all keywords
     wordlist = list(key_words_dict_scores.keys())
+    clean_wordlist = []
     for index in range(0, len(wordlist)):
         wordlist[index] = clean_text(wordlist[index])
-    
+        if wordlist[index] != "":
+            clean_wordlist.append(wordlist[index])
+
     # Assign the key words to the keywords column
-    anime_df['Keywords'].iloc[count] = " ".join(wordlist)
+    anime_df['Keywords'].iloc[count] = " ".join(clean_wordlist)
     count+= 1
 
 
-# In[ ]:
+# In[229]:
 
 
 """
@@ -318,14 +339,14 @@ count_matrix = count.fit_transform(anime_df['Keywords'])
 cosine_sim = cosine_similarity(count_matrix, count_matrix)
 
 
-# In[ ]:
+# In[224]:
 
 
 # Store the Python data into byte streams for faster future processing
 dill.dump_session('my_anime_list.db')
 
 
-# In[ ]:
+# In[232]:
 
 
 # Run the recommender here, and set the number of anime to be recommended in the second parameter
