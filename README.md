@@ -42,4 +42,4 @@ Phase 2: Example of the anime recommender system, recommending anime similar to 
 Phase 3: Example of the anime recommender system, after the user queries for Toradora!, Mahou Shoujo Madoka★Magica, and Ojamajo Doremi Sharp.
 
 ## Future Work
-Moving beyond Phase 3, the query in Phase 1 can be further improved by removing case sensitivity and typo. For instance, being able to detect the user's genre input "slice of lief" as "Slice of Life", or the title "Id Invaded" as "Id:Invaded".
+Moving beyond Phase 3.1, the query in Phase 1 can be further improved by considering minor typo. For instance, being able to detect the user's genre input "slice of lief" as "Slice of Life", or the title "Id Invaded" as "Id:Invaded".
