@@ -15,6 +15,8 @@ The program is divided into phases (WIP):
 
 * Phase 3 (22 Nov 2020): The NLP-based recommender system has been developed to also account for previous user queries in Phase 1. The top queried anime will be used as recommendations, allowing for a more personalised recommendation. The more times the user queries, the more varied the system in recommending anime.
 
+* Phase 3.1 (10 July 2021): The anime querying method is now able to accept filters without case sensitivity. The show title is also taken into account in keywords for recommendation, leading to a more accurate prediction of similar shows.
+
 ## Setting Up
 This model is written in both Jupyter Notebook version 4.4.0 and Python version 3.7.1. You may use any integrated development environment (IDE)
 to run the program using a Python interpreter but Visual Studio Code or Jupyter Notebook is highly recommended thanks to their Python Interactive window.
