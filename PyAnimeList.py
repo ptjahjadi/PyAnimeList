@@ -7,9 +7,9 @@
 # 
 # Allows users to filter Anime/Donghua based on these attributes with a sorting feature.
 # 
-# Search for your favourite Anime/Donghua or simply look for recommendation with the filtering and sorting feature!
+# Program also includes a cosine-similarity based recommender system to recommend shows you like.
 
-# In[5]:
+# In[1]:
 
 
 # Imported Libraries
@@ -25,7 +25,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import difflib
 
 
-# In[6]:
+# In[2]:
 
 
 # Function to ask for an anime title and recommend anime based on cosine similarity
@@ -54,7 +54,7 @@ def anime_recommendations(cosine_sim, number_anime):
         print("No results found.")
 
 
-# In[7]:
+# In[3]:
 
 
 # Function to recommend anime based on query results in Phase 1
@@ -75,7 +75,7 @@ def anime_recommendations_from_query(query_recommendation_list, cosine_sim, numb
             print(anime_df.Title.iloc[index])
 
 
-# In[137]:
+# In[4]:
 
 
 # Function to clean words from punctuation and remove capital case to standardise text tokens
@@ -88,14 +88,14 @@ def clean_text(word):
     return no_punct.lower()
 
 
-# In[ ]:
+# In[2]:
 
 
 # We can load this later instead of retrieving data again
 dill.load_session('my_anime_list.db')
 
 
-# In[15]:
+# In[7]:
 
 
 """
@@ -106,13 +106,13 @@ Skip running this block if the session "my_anime_list.db" has been loaded
 
 jikan = Jikan()
 
-years = [year for year in range (2000, 2021)]
+years = [year for year in range (2000, 2023)]
 seasons = ['winter', 'spring', 'summer', 'fall']
 
 myanimelist = []
 
 
-# In[17]:
+# In[12]:
 
 
 """
@@ -120,20 +120,15 @@ Skip running this block if the session "my_anime_list.db" has been loaded
 """
 
 # Retrieve anime data through Jikan
-# Time delay of 7 seconds per year for API rate limiting
 for year in years:
     for season in seasons:
         myanimelist.append(jikan.season(year = year, season = season))
-    time.sleep(7)
-myanimelist.append(jikan.season(year = 2021, season = 'winter'))
-myanimelist.append(jikan.season(year = 2021, season = 'spring'))
-time.sleep(7)
-myanimelist.append(jikan.season(year = 2021, season = 'summer'))
+        
 
 
 # PHASE 1: Store and retrieve anime data in dataframes for search and sort
 
-# In[50]:
+# In[47]:
 
 
 # Collect all necessary attributes: Title, Score, Members, Genre, Producers, Year, Season and Synopsis
@@ -146,7 +141,7 @@ for animeseason in myanimelist:
         
 
 
-# In[111]:
+# In[48]:
 
 
 # Create a dataframe to store Anime data and remove duplicate entries
@@ -155,7 +150,7 @@ anime_df.drop_duplicates(subset= "Title", keep = 'first', inplace = True)
 anime_df.index.name = "ID"
 
 
-# In[236]:
+# In[49]:
 
 
 query_recommendation_list = []
@@ -228,7 +223,7 @@ def query_my_anime(interim_df, method, list_of_queries):
         elif (operator.lower() in ["r", "range"]):
             value_low = input("Between which values inclusive? Set lower limit:\n")
             value_high = input("Between which values inclusive? Set upper limit:\n")
-            interim_df.query('{} > {} and {} < {}'.format
+            interim_df = interim_df.query('{} > {} and {} < {}'.format
                              (method.capitalize(), value_low, method.capitalize(), value_high))
             list_of_queries.append("{} <= {} <= {}".format(value_low, method.capitalize(), value_high))
     clear_output(wait=True)        
@@ -259,7 +254,7 @@ def limit_my_anime():
     return limit
 
 
-# In[237]:
+# In[50]:
 
 
 # Query and search for anime here!
@@ -274,16 +269,9 @@ except IndexError:
 query_df
 
 
-# In[132]:
-
-
-for i, j in anime_df.iterrows():
-    print(j)
-
-
 # PHASE 2: Use natural language processing to determine anime similarity for recommendation
 
-# In[228]:
+# In[51]:
 
 
 """
@@ -324,7 +312,7 @@ for index, row in anime_df.iterrows():
     count+= 1
 
 
-# In[229]:
+# In[52]:
 
 
 """
@@ -339,14 +327,14 @@ count_matrix = count.fit_transform(anime_df['Keywords'])
 cosine_sim = cosine_similarity(count_matrix, count_matrix)
 
 
-# In[224]:
+# In[53]:
 
 
 # Store the Python data into byte streams for faster future processing
 dill.dump_session('my_anime_list.db')
 
 
-# In[232]:
+# In[56]:
 
 
 # Run the recommender here, and set the number of anime to be recommended in the second parameter
@@ -355,11 +343,17 @@ anime_recommendations(cosine_sim, 10)
 
 # PHASE 3: Provide personalised anime recommendations to users through the results of their queries
 
-# In[ ]:
+# In[57]:
 
 
 # Run the recommender here, and set the number of anime to be recommended in the third parameter
 anime_recommendations_from_query(query_recommendation_list, cosine_sim, 20)
+
+
+# In[64]:
+
+
+anime_df.to_csv('anime_data.csv', index=True)
 
 
 # In[ ]:
