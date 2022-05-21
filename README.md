@@ -1,5 +1,5 @@
 # PyAnimeList
-Retrieve your favourite anime or search for recommendations through filtering and sorting or the PyAnimeList anime recommender system. Data includes shows from Winter 2020 - Summer 2021!
+Retrieve your favourite anime or search for recommendations through filtering and sorting or the PyAnimeList anime recommender system. Data includes shows from Winter 2020 - Fall 2022.
 
 ## Aim
 The aim of this project is to store and retrieve data from MyAnimeList: https://myanimelist.net/.
@@ -11,7 +11,7 @@ The program is divided into phases (WIP):
 
 * Phase 2 (2 Nov 2020): An NLP-based recommender system using cosine similarity allows users to input the title of an anime to retrieve similar anime. This system allows recommending users similar anime based on genre, synopsis and anime producer.
 
-* Phase 2.1 (7 Nov 2020): Updates to the querying and recommender system for ease of usage. This includes an additional feature for querying that accepts number of results as user input. The recommender system is now case-insensitive and is able to return the closest anime search to the user input. Anime title synonyms are not supported, however.
+* Phase 2.1 (7 Nov 2020): Updates to the querying and recommender system for ease of usage. This includes an additional feature for querying that accepts number of results as user input. The recommender system is now case-insensitive and is able to return the closest anime search to the user input.
 
 * Phase 3 (22 Nov 2020): The NLP-based recommender system has been developed to also account for previous user queries in Phase 1. The top queried anime will be used as recommendations, allowing for a more personalised recommendation. The more times the user queries, the more varied the system in recommending anime.
 
@@ -32,7 +32,6 @@ using JikanPy.
 
 Phase 1: Example of anime filtering using a MyAnimeList average score between 7 and 9, with the Slice of Life genre and made after 2010, sorted by the number of members (popularity) with 5 results.
 
-
 ![visuals](https://imgur.com/XSh2V5L.jpg)
 
 Phase 2: Example of the anime recommender system, recommending anime similar to New Game!
@@ -42,4 +41,4 @@ Phase 2: Example of the anime recommender system, recommending anime similar to 
 Phase 3: Example of the anime recommender system, after the user queries for Toradora!, Mahou Shoujo Madoka★Magica, and Ojamajo Doremi Sharp.
 
 ## Future Work
-Moving beyond Phase 3.1, the query in Phase 1 can be further improved by considering minor typo. For instance, being able to detect the user's genre input "slice of lief" as "Slice of Life", or the title "Id Invaded" as "Id:Invaded".
+Moving beyond Phase 3.1, the query in Phase 1 can be further improved by considering minor typographical errors. For instance, being able to detect the user's genre input "slice of lief" as "Slice of Life".
