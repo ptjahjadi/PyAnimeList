@@ -32,9 +32,11 @@ using JikanPy.
 
 Phase 1: Example of anime filtering using a MyAnimeList average score between 7 and 9, with the Slice of Life genre and made after 2010, sorted by the number of members (popularity) with 5 results.
 
+
 ![visuals](https://imgur.com/XSh2V5L.jpg)
 
 Phase 2: Example of the anime recommender system, recommending anime similar to New Game!
+
 
 ![visuals](https://imgur.com/ZXw0zdU.jpg)
 
