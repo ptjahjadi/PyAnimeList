@@ -1,5 +1,5 @@
 # PyAnimeList
-Retrieve data about animimation shows through filtering and sorting or search for recommendation using a cosine-similarity based recommender system. Data includes shows from Winter 2020 - Fall 2022.
+Retrieve data about animation shows through filtering and sorting or search for recommendation using a cosine-similarity based recommender system. Project includes a visualisation dashboard developed in Power BI. Data includes shows from Winter 2020 - Fall 2022.
 
 ## Aim
 The aim of this project is to store and retrieve data from MyAnimeList: https://myanimelist.net/.
@@ -23,6 +23,8 @@ to run the program using a Python interpreter but Visual Studio Code or Jupyter 
 
 The notebook document can be found at PyAnimeList.ipynb while the Python file can be found at PyAnimeList.py. Either file should run the program for sorting
 and querying. 
+
+The dashboard can be opened at anime_dashboard.pbix.
 
 The data is taken using the Jikan (Kanji: 時間) API, an open source PHP and REST API that parses website data from MyAnimeList. There is a Python wrapper for Jikan
 using JikanPy.
